@@ -1,0 +1,41 @@
+        <form action="http://stud03.rta.lv/wordpress/hello-php/" method="get">
+            <select name="id">
+                  <option value="1">Latvija</option>
+                  <option value="2">Igaunija</option>
+                  <option value="3">Lietuva</option>
+                 <option value="6">Polija</option> 
+            </select>
+            <input type="submit" value="Submit"/>
+        </form>
+<div id="contacts">
+
+    [insert_php]
+
+    $server = "192.168.192.35";
+    $user = "myapp";
+    $password= "password";
+
+    if(isset($_GET['id'])) 
+    {
+        $id = $_GET['id'];
+
+     try{
+        $connection = new PDO("mysql:host=$server;dbname=companyname", $user, $password);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  
+        $sql = "SELECT countries.country, contacts.address, contacts.telephone, contacts.email FROM countries INNER JOIN contacts ON contacts.country_id = countries.ID WHERE countries.ID = $id;";
+
+        $result = $connection->query($sql);      
+           
+        $row = $result->fetchObject();
+        echo "Country: " . $row->country . "<br/>Address: " . $row->address . "<br/>Tel: " . $row->telephone . "<br/>E-mail: " . $row->email . "<br/>";
+        
+        }
+     catch(Exception $e)
+        {echo "Connection failed!" . $e->getMessage();}
+
+    }
+
+    [/insert_php]
+
+</div>
